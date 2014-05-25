@@ -1,8 +1,8 @@
 %% BackProjection
 function B = BackProjection(img, obj, bin, HistMethod)
-% img = (img + abs(min(img(:)))) / (abs(min(img(:))) + max(img(:)));
-% img = img*255;
-% img = img+1;
+img = (img + abs(min(img(:)))) / (abs(min(img(:))) + max(img(:)));
+img = img*255;
+img = img+1;
 
 B = zeros(size(img,1),size(img,2));
 binsize = 256/bin;
