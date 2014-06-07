@@ -1,7 +1,5 @@
 clc; close all; clear all;
 
-find_STD = @(im, x, y, w) std(impart(im,[x t],w));
-
 %% Histogram Calculation - through Ball001.JPG !
 [im, map] = imread('balls/MVC-001F.JPG');
 % figure; imshow(im);
@@ -16,7 +14,7 @@ ball_winsize = 40*[1 1];
 
 Ball = impart(im_hs,ball_center,ball_winsize);
 
-bins = 32;
+bins = 128;
 binsize = 256 / bins;
 
 bin1 = ceil(double(Ball(:,:,1))/(binsize+1))+1;
@@ -33,19 +31,16 @@ for i=1:size(Ball,1)
     end
 end
 
-%% Histogram training through  too.
-
-[im2, map2] = imread('balls/MVC-020F.JPG');
-% figure; imshow(im2);
-
+%% Histogram training through MVC009 too.
+[im2, map2] = imread('balls/MVC-018F.JPG');
 
 im_hsv2 = rgb2hsv(im2);
 im_hs2 = im_hsv2(:,:,1:2);
 
 im_hs2 = im_hs2*255;
 
-ball_center2 = [248 241];
-ball_winsize2 = 35 * [1 1];
+ball_center2 = [256 257];
+ball_winsize2 = 70 * [1 1];
 
 Ball2 = impart(im_hs2,ball_center2,ball_winsize2);
 bin1 = ceil(double(Ball2(:,:,1))/(binsize+1))+1;
@@ -60,7 +55,6 @@ for i=1:size(Ball2,1)
     end
 end
 
-%% Histogram training through MVC009 too.
 
 % [im2, map2] = imread('balls/MVC-009F.JPG');
 % figure; imshow(im2);
@@ -87,22 +81,31 @@ end
 %     end
 % end
 
+
 H = H ./ max(H(:)) * 255;
 
-%% Read new img
-[img,map_img] = imread('balls/MVC-005F.JPG');
-
-figure; imshow(img);
-
-img_hsv = rgb2hsv(img);
-img_hs = img_hsv(:,:,1:2);
-
-img_hs = img_hs*255;
-
-%% Backprojecting on a new img:
-new_img = BackProjection(img_hs,H,bins,2);
-figure; imshow(new_img,map_img);
-
+for i=1:25
+    %% Read new img
+    if (i<10)
+        num = ['0' num2str(i)];
+    else
+        num = num2str(i);
+    end
+    file = ['balls/MVC-0' num 'F.JPG'];
+    [img,map_img] = imread(file);
+    
+    figure; imshow(img);
+    
+    img_hsv = rgb2hsv(img);    
+    img_hs = img_hsv(:,:,1:2);
+    
+    img_hs = img_hs*255;
+    
+    %% Backprojecting on a new img:
+    new_img = BackProjection(img_hs,H,bins,2);
+    figure; imshow(new_img,map_img);
+    close all;
+end
 %% Thresholding the image
 
 thresh = 60;
