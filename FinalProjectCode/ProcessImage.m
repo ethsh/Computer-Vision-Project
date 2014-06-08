@@ -3,9 +3,12 @@ function ProcessImage(processing_image, originalImage)
 global Config;
 
 layer1 = double(processing_image(:,:,1));
+
+layer1(abs(layer1)<16) = 0;
+
 layer2 = double(processing_image(:,:,2));
 
-total_layer = Config.lc_lambda * layer1 - (1-Config.lc_lambda) * layer2;
+total_layer = Config.lc_lambda * layer1 + (1-Config.lc_lambda) * layer2;
 total_layer = medfilt2(total_layer, [20 20]);
 H=fspecial('gaussian',3,1);
 total_layer=conv2(total_layer,H,'same');
@@ -14,10 +17,8 @@ p_nms = prctile(total_layer(:),Config.nms_Percentage);
 I_nms = NMS(total_layer,Config.minimal_distance_between_maxima,p_nms);
 figure; imshow(I_nms);
 
-processing_mat_1 = GenerateCostMap( layer1,11,Config.penalty,Config.zero_Percentage,Config.penalty_Percentage,1);
-% processing_mat_1 = GeneratePrecessingMats(layer1, 1);
-processing_mat_2 = GenerateCostMap( layer2,11,Config.penalty,Config.zero_Percentage,Config.penalty_Percentage,1);
-% processing_mat_2 = GeneratePrecessingMats(layer2, 1);
+processing_mat_1 = GeneratePrecessingMats(layer1, 1);
+processing_mat_2 = GeneratePrecessingMats(layer2, 1);
 
 
 

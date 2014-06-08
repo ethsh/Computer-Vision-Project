@@ -24,12 +24,12 @@ Config.fine_penalty= -2;
 
 Config.nms_Percentage = 99;
 Config.penalty= -1;
-Config.dilate_len = 40;
+Config.dilate_len = 13;
 
-Config.lc_lambda = 0.3;
+Config.lc_lambda = 0.5;
 
 
-Config.minimal_distance_between_maxima = 50;
+Config.minimal_distance_between_maxima = 15;
 Config.grad_type = 'sobel';
 Config.initial_r_guess = 30;
 Config.recursive_max_iter = 50;
@@ -40,7 +40,7 @@ Config.initial_integral_diff_facotr = 100;
 
 disp('Begining...');
 
-for i=8:10
+for i=9
     disp(['Image ' num2str(i)]);
     tic;
     %% Read new img

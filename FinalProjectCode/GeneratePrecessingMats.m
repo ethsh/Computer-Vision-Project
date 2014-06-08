@@ -13,21 +13,20 @@ else
 end
 
 output_mat = abs(input_mat);
-output_mat(output_mat < Config.initial_threshold) = 0;
-
-% output_mat = (output_mat-mean(output_mat(:))/(std(output_mat(:))));
-
+%output_mat(output_mat < Config.initial_threshold) = 0;
 p_initial = prctile(output_mat(:),zero_percent);
 output_mat(output_mat<=p_initial) = 0;
 
-output_mat = medfilt2(output_mat, [20 20]);
+output_mat = (output_mat-mean(output_mat(:))/(std(std((output_mat)))));
+
+%output_mat = medfilt2(output_mat, [20 20]);
 
 se = strel('disk',Config.dilate_len);
 % output_mat = imdilate(output_mat,se);
-output_mat = imclose(output_mat,se);
+output_mat = imdilate(output_mat,se);
 
-h = fspecial('gaussian', 10, 1);
-output_mat = conv2(output_mat, h, 'same');
+% h = fspecial('gaussian', 10, 1);
+% output_mat = conv2(output_mat, h, 'same');
 
 output_mat = output_mat/max(output_mat(:));
 p_initial = prctile(output_mat(:),penatly_percent);
