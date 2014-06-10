@@ -51,9 +51,9 @@ T=prctile(output_mat(1:end),penatly_percent);
 output_mat(output_mat<=T)=penalty;
 
 if (initial_flag)
-    h = fspecial('gaussian', 10, 1);
-    output_mat = conv2(output_mat, h, 'same');
-end
+h = fspecial('gaussian', 10, 1);
+output_mat = conv2(output_mat, h, 'same');
+
 
 % figure; surf(output_mat);
 % figure; imshow(output_mat);

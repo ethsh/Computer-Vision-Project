@@ -17,30 +17,31 @@ global Config;
 Config.initial_threshold = 16;
 Config.zero_Percentage = 90;
 Config.penalty_Percentage = 95;
-Config.fine_zero_Percentage = 70;
-Config.fine_penalty_Percentage = 75;
-Config.fine_penalty= -2;
+Config.fine_zero_Percentage = 50;
+Config.fine_penalty_Percentage = 50;
+Config.fine_penalty= -1;
 
 
 Config.nms_Percentage = 99;
 Config.penalty= -1;
-Config.dilate_len = 13;
+Config.dilate_len = 5;
 
 Config.lc_lambda = 0.5;
 
 
-Config.minimal_distance_between_maxima = 15;
-Config.grad_type = 'sobel';
-Config.initial_r_guess = 30;
+Config.minimal_distance_between_maxima = 5;
+Config.grad_type = 'prewitt';
+Config.initial_r_guess = 70;
 Config.recursive_max_iter = 50;
-Config.error_allowed = 10^-4;
+Config.inner_recursion_max_iter = 5;
+Config.error_allowed = 10^-3;
 Config.step_size_factor = 0.005;
 Config.r_additional_step_size_facotr = 0.05;
 Config.initial_integral_diff_facotr = 100;
 
 disp('Begining...');
 
-for i=9
+for i=1
     disp(['Image ' num2str(i)]);
     tic;
     %% Read new img

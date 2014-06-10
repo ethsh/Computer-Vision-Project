@@ -1,7 +1,7 @@
 function [grad_x, grad_y] = CalcGradient(I, grad_type)
 
 if strcmp(grad_type, 'sobel')
-    g_x = [-1 0 1; -2 0 2; -1 0 1];
+    g_x = [-1 0 1; -2 0 2; -1 0 1]/8;
     g_y = g_x';
 elseif strcmp(grad_type, 'prewitt')
     g_x = 1/6 * [-1 0 1; -1 0 1; -1 0 1];
