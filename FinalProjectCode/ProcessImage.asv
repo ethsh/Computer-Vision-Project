@@ -32,25 +32,43 @@ centers = sortrows(centers, 3);
 
 figure; imshow(originalImage);
 hold on;
-for i = 1:size(centers,1)
+for i = 1:floor(size(centers,1)/2)
     y = centers(i,1);
     x = centers(i,2);
     r = Config.initial_r_guess;
     
+    if (i>1)
+        Ezer_mat = repmat([x y r],size(Mat_outputs,1),1);
+        Distances_mat = 
+    end
+    
     % First Convergence - Big picture
-    [x_final, y_final, r_final] = RecursiveParametersConvergence(y, x, r, processing_mat, grad_x_1, grad_y_1, grad_x_2, grad_y_2);
+    [x_final, y_final, r_final, S_final] = RecursiveParametersConvergence(y, x, r, processing_mat, grad_x_1, grad_y_1, grad_x_2, grad_y_2);
     
     % Fine tuning
-    SideLength = min([round(r_final)*r+1 size(original_image,1) size(original_image,2));
+    SideLength = min([round(r_final)*4+1 size(originalImage,1) size(originalImage,2)]);
     dT = (SideLength -1)/2;
     
-    layer1_cropped = layer1(y_final-dT:y_final_dT, x_final-dT:x_final+dT);
-    layer2_cropped = layer2(y_final-dT:y_final_dT, x_final-dT:x_final+dT);
+    y_final = round(y_final);
+    x_final = round(x_final);
     
+    layer1_cropped = layer1(y_final-dT:y_final+dT, x_final-dT:x_final+dT);
+    layer2_cropped = layer2(y_final-dT:y_final+dT, x_final-dT:x_final+dT);
+    
+    processing_mat_1_fine = GeneratePrecessingMats(layer1_cropped, 0);
+    processing_mat_2_fine = GeneratePrecessingMats(layer2_cropped, 0);
+    
+    [grad_x_1_fine, grad_y_1_fine] = CalcGradient(processing_mat_1_fine, Config.grad_type);
+    [grad_x_2_fine, grad_y_2_fine] = CalcGradient(processing_mat_2_fine, Config.grad_type);
+    
+    processing_mat_fine = Config.lc_lambda * processing_mat_1_fine + (1-Config.lc_lambda) * processing_mat_2_fine;
+    
+    [x_final_fine, y_final_fine, r_final_fine, S_final_fine] = RecursiveParametersConvergence(dT, dT, r_final, processing_mat_fine, grad_x_1_fine, grad_y_1_fine, grad_x_2_fine, grad_y_2_fine);
+    Mat_outputs(i,:) = [x_final_fine, y_final_fine, r_final_fine, S_final_fine];
     
     if (r_final>0)
-        viscircles([x_final, y_final], r_final);
+        viscircles([x_final+x_final_fine-dT, y_final+y_final_fine-dT], r_final_fine);
     end
 end
-close all;
+
 end

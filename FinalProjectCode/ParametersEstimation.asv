@@ -1,4 +1,4 @@
-function [S, steps_normed, steps] = ParametersEstimation(y0, x0, r0, I, grad_x_1, grad_y_1, grad_x_2, grad_y_2)
+function [S, steps] = ParametersEstimation(y0, x0, r0, I, grad_x_1, grad_y_1, grad_x_2, grad_y_2)
 
 if (r0==0)
     S = 0;
@@ -38,11 +38,9 @@ mat_ezer_empty = mat_ezer-mat_ezer_temp;
 
 mat_ezer_r = sqrt(x_grid.^2 + y_grid.^2);
 mat_ezer_r((x_grid.^2 + y_grid.^2) > r0^2) = 0;
-try
+
 relevant_I = I(y0-r0:y0+r0, x0-r0:x0+r0);
-catch
-    aaa =1;
-end
+
 % Integral + Advance Calculation                                           
 S = -sum(sum(double(relevant_I).*mat_ezer_r));
 
@@ -58,7 +56,6 @@ relevant_grad_y = Config.lc_lambda * relevant_grad_y_1 + (1 - Config.lc_lambda) 
 [dy, dx, dr] = CalcGradSteps(relevant_I, relevant_grad_x, relevant_grad_y, mat_ezer_r, mat_ezer_empty, r0); % sending mat_ezer so we won't have to calculate it again inside the function
 
 steps = -[dy, dx, dr];
-steps_normed = steps / norm(steps);
 
 if (norm(steps) == 0)
     y = y0;
@@ -67,7 +64,7 @@ if (norm(steps) == 0)
     return;
 end
 
-if (steps(3) == inf || isnan(steps(3)))
+if (abs(steps(3)) == inf || isnan(steps(3)))
     y = y0;
     x = x0;
     r = r0;

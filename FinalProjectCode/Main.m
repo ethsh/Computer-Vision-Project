@@ -31,17 +31,17 @@ Config.lc_lambda = 0.5;
 
 Config.minimal_distance_between_maxima = 5;
 Config.grad_type = 'prewitt';
-Config.initial_r_guess = 70;
-Config.recursive_max_iter = 50;
-Config.inner_recursion_max_iter = 5;
-Config.error_allowed = 10^-3;
-Config.step_size_factor = 0.005;
-Config.r_additional_step_size_facotr = 0.05;
-Config.initial_integral_diff_facotr = 100;
+Config.initial_r_guess = 65;
+Config.recursive_max_iter = 30;
+Config.error_allowed = 10^-2;
+%Config.step_size_factor = 0.005;
+%Config.r_additional_step_size_facotr = 0.05;
+%Config.initial_integral_diff_facotr = 100;
 
 disp('Begining...');
 
-for i=1
+for i=1:25
+    close all;
     disp(['Image ' num2str(i)]);
     tic;
     %% Read new img

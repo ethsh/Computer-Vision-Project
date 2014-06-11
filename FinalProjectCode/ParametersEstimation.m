@@ -66,7 +66,7 @@ if (norm(steps) == 0)
     return;
 end
 
-if (steps(3) == inf || isnan(steps(3)))
+if (abs(steps(3)) == inf || isnan(steps(3)))
     y = y0;
     x = x0;
     r = r0;
