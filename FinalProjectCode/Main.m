@@ -14,24 +14,27 @@ end
 
 global Config;
 
+Config.scale_factor = 0.5;
+
 Config.initial_threshold = 16;
 Config.zero_Percentage = 90;
 Config.penalty_Percentage = 95;
 Config.fine_zero_Percentage = 50;
 Config.fine_penalty_Percentage = 50;
-Config.fine_penalty= -1;
+Config.fine_penalty= -1.2;
 
 
-Config.nms_Percentage = 99;
-Config.penalty= -1;
+Config.nms_Percentage = 97;
+Config.penalty= -1.2;
 Config.dilate_len = 5;
+Config.prctile_security = 0;
 
 Config.lc_lambda = 0.5;
 
 
-Config.minimal_distance_between_maxima = 5;
+Config.minimal_distance_between_maxima = round(40*Config.scale_factor);
 Config.grad_type = 'prewitt';
-Config.initial_r_guess = 65;
+Config.initial_r_guess = 65 * Config.scale_factor;
 Config.recursive_max_iter = 30;
 Config.error_allowed = 10^-2;
 %Config.step_size_factor = 0.005;
@@ -52,7 +55,7 @@ for i=1:25
     end
     file = ['balls/MVC-0' num 'F.JPG'];
     [img,map_img] = imread(file);
-    figure; imshow(img);
+    %figure; imshow(img);
     
     wanted_image = extract_wanted_format(img, HSV_flag);
     image_working_dimensions = wanted_image(:,:,wanted_dimensions);

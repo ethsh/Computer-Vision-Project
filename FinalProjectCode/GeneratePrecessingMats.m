@@ -14,8 +14,9 @@ end
 
 output_mat = abs(input_mat);
 %output_mat(output_mat < Config.initial_threshold) = 0;
-p_initial = prctile(output_mat(:),zero_percent);
-output_mat(output_mat<=p_initial) = 0;
+
+% p_initial = prctile(output_mat(:),zero_percent);
+% output_mat(output_mat<=p_initial-Config.prctile_security) = 0;
 
 output_mat = (output_mat-mean(output_mat(:))/(std(((output_mat(:))))));
 
@@ -32,33 +33,9 @@ end
 % output_mat = conv2(output_mat, h, 'same');
 
 output_mat = output_mat/max(output_mat(:));
-p_initial = prctile(output_mat(:),penatly_percent);
-output_mat(output_mat <= p_initial) = penalty;
-
-% figure; surf(output_mat);
-% figure; imshow(output_mat);
-return;
-
-
-output_mat=abs(input_mat);
-T=prctile(output_mat(1:end),zero_percent);
-output_mat(output_mat<T)=0;
-output_mat=(output_mat-mean(output_mat(:)))./(std(output_mat(:)));
-
-se = strel('disk',Config.dilate_len);
-output_mat = imdilate(output_mat,se);
-
-output_mat=(output_mat./max(output_mat(:)));
-
-T=prctile(output_mat(1:end),penatly_percent);
-output_mat(output_mat<=T)=penalty;
-
-if (initial_flag)
-    h = fspecial('gaussian', 10, 1);
-    output_mat = conv2(output_mat, h, 'same');
-end
-
-% figure; surf(output_mat);
-% figure; imshow(output_mat);
+p_initial = (min(output_mat(:)));
+%p_initial = prctile(output_mat(:),penatly_percent);
+output_mat(output_mat <= 0) = penalty;
+%output_mat(output_mat == 0) = penalty;
 
 end
